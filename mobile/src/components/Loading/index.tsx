@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
 
-const Loading: React.FC = () => {
+export const Loading: React.FC = () => {
   return (
     <View
       style={{
@@ -15,5 +15,3 @@ const Loading: React.FC = () => {
     </View>
   );
 };
-
-export default Loading;
