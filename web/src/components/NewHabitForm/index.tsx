@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { FormEvent, useState } from 'react'
 import { Check } from 'phosphor-react'
 import * as CheckBox from '@radix-ui/react-checkbox'
 const availableWeekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
 export const NewHabitForm: React.FC = () => {
+  const [title, setTitle] = useState('')
+  const [weekDays, setWeekDays] = useState<number[]>([])
+
+  function createNewHabit(event: FormEvent) {
+    event.preventDefault()
+    console.log(weekDays)
+  }
+
+  function handleToggleWeekDay(shouldAddToList: boolean, weekDayIndex: number) {
+    setWeekDays((prevWeekDays) => {
+      if (shouldAddToList) {
+        return [...prevWeekDays, weekDayIndex]
+      } else {
+        return prevWeekDays.filter((weekDay) => weekDay !== weekDayIndex)
+      }
+    })
+  }
+
   return (
-    <form className="w-full flex flex-col mt-6">
+    <form onSubmit={createNewHabit} className="w-full flex flex-col mt-6">
       <label htmlFor="title" className="font-semibold leading-tight">
         Qual seu comprometimento?
       </label>
@@ -17,6 +35,7 @@ export const NewHabitForm: React.FC = () => {
         className="
       p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400"
         autoFocus
+        onChange={(event) => setTitle(event.target.value)}
       />
 
       <label htmlFor="title" className="font-semibold leading-tight mt-4">
@@ -24,8 +43,11 @@ export const NewHabitForm: React.FC = () => {
       </label>
 
       <div className="mt-3 flex flex-col gap-2">
-        {availableWeekDays.map((weekDay) => (
-          <CheckBox.Root key={weekDay} className="flex items-center gap-3 group">
+        {availableWeekDays.map((weekDay, index) => (
+          <CheckBox.Root
+            key={weekDay}
+            className="flex items-center gap-3 group"
+            onCheckedChange={(checked) => handleToggleWeekDay(!!checked, index)}>
             <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500">
               <CheckBox.Indicator>
                 <Check size={20} className="text-white" />
