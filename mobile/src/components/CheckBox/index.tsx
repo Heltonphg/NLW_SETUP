@@ -19,7 +19,7 @@ export const CheckBox: React.FC<ICheckBoxProps> = ({ checked = false, title, ...
         {checked && <Feather name="check" size={20} color={colors.white} />}
       </View>
 
-      <Text className="text-white text-base ml-3">{title}</Text>
+      <Text className="text-white text-base ml-3 font-semibold">{title}</Text>
     </TouchableOpacity>
   )
 }
