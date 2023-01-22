@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dimensions, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { generateProgressPorcentage } from '../../utils/generete-progress-porcentage'
 
 const WEEK_DAYS = 7
@@ -21,6 +22,8 @@ export const HabitDay: React.FC<IHabitDayProps> = ({
 }) => {
   const amountAccomplishedPorcentage =
     amountOfHabits > 0 ? generateProgressPorcentage(amountOfHabits, amountCompleted) : 0
+  const today = dayjs().startOf('day').toDate()
+  const isToday = dayjs(date).isSame(today)
 
   return (
     <TouchableOpacity
@@ -34,7 +37,8 @@ export const HabitDay: React.FC<IHabitDayProps> = ({
           amountAccomplishedPorcentage >= 40 && amountAccomplishedPorcentage < 60,
         ['bg-violet-600 border-violet-500']:
           amountAccomplishedPorcentage >= 60 && amountAccomplishedPorcentage < 80,
-        ['bg-violet-500 border-violet-400']: amountAccomplishedPorcentage >= 80
+        ['bg-violet-500 border-violet-400']: amountAccomplishedPorcentage >= 80,
+        [' border-white']: isToday
       })}
       style={{
         width: DAY_SIZE,

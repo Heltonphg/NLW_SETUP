@@ -1,19 +1,44 @@
 import React, { useState } from 'react'
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import colors from 'tailwindcss/colors'
 import { Feather } from '@expo/vector-icons'
 import { BackButton } from '../../components/BackButton'
 import { CheckBox } from '../../components/CheckBox'
+import { api } from '../../lib/axios'
 const availableWeekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
 export const New: React.FC = () => {
+  const [title, setTitle] = useState<string>('')
   const [weekDays, setWeekDays] = useState<number[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   function handleToggleWeekDay(weekDayIndex: number) {
     if (weekDays.includes(weekDayIndex)) {
       setWeekDays((prevState) => prevState.filter((weekDay) => weekDay !== weekDayIndex))
     } else {
       setWeekDays((prevState) => [...prevState, weekDayIndex])
+    }
+  }
+
+  async function handleCreateHabit() {
+    try {
+      setLoading(true)
+      if (!title || weekDays.length === 0) {
+        Alert.alert('Novo Hábito', 'Informe o título e a recorrência do hábito')
+        return
+      }
+      await api.post('/habits', {
+        title,
+        weekDays
+      })
+
+      setTitle('')
+      setWeekDays([])
+      Alert.alert('Novo Hábito', 'Hábito criado com sucesso!')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -34,6 +59,8 @@ export const New: React.FC = () => {
           placeholder="Exercíocios, dormir bem"
           placeholderTextColor={colors.gray[400]}
           className="h-12 pl-4 rounded-lg mt-4 bg-zinc-900 text-white border-2 border-zinc-800 focus:border-green-600"
+          onChangeText={setTitle}
+          value={title}
         />
 
         <Text className="mt-4 mb-4 text-white font-semibold text-base">Qual a recorrência?</Text>
@@ -49,7 +76,8 @@ export const New: React.FC = () => {
 
         <TouchableOpacity
           className="w-full h-14 flex-row items-center justify-center bg-green-600 rounded-md mt-8"
-          activeOpacity={0.7}>
+          activeOpacity={0.7}
+          onPress={handleCreateHabit}>
           <Feather name="check" size={20} color={colors.white} />
           <Text className="font-semibold text-base text-white ml-2">Confirmar</Text>
         </TouchableOpacity>
