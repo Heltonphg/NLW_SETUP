@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, Text, View } from 'react-native'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRoute } from '@react-navigation/native'
 import { BackButton } from '../../components/BackButton'
@@ -30,6 +31,7 @@ export const Habit: React.FC = () => {
   const { date } = route.params as Params
 
   const parsedDate = dayjs(date)
+  const isDateInPast = parsedDate.endOf('day').isBefore(new Date())
   const dayOfWeek = parsedDate.format('dddd')
   const dayOfMonth = parsedDate.format('DD/MM')
 
@@ -58,10 +60,16 @@ export const Habit: React.FC = () => {
   }
 
   async function handleToggleHabit(habitId: string) {
-    if (completedHabits.includes(habitId)) {
-      setCompletedHabits((prevState) => prevState.filter((habitId) => habitId !== habitId))
-    } else {
-      setCompletedHabits((prevState) => [...prevState, habitId])
+    try {
+      await api.patch(`/habits/${habitId}/toggle`)
+      if (completedHabits.includes(habitId)) {
+        setCompletedHabits((prevState) => prevState.filter((id) => id !== habitId))
+      } else {
+        setCompletedHabits((prevState) => [...prevState, habitId])
+      }
+    } catch (error) {
+      console.log(error)
+      Alert.alert('Ops', 'Ocorreu um erro ao atualizar o hábito')
     }
   }
 
@@ -88,13 +96,17 @@ export const Habit: React.FC = () => {
 
         <ProgressBar progress={habitsProgress} />
 
-        <View className="mt-6">
+        <View
+          className={clsx('mt-6', {
+            ['opacity-30']: isDateInPast
+          })}>
           {dayInfo?.possibleHabits && dayInfo.possibleHabits.length > 0 ? (
             dayInfo?.possibleHabits.map((habit) => (
               <CheckBox
                 key={habit.id}
                 title={habit.title}
                 checked={completedHabits.includes(habit.id)}
+                disabled={isDateInPast}
                 onPress={() => handleToggleHabit(habit.id)}
               />
             ))
@@ -102,6 +114,11 @@ export const Habit: React.FC = () => {
             <HabitEmpty />
           )}
         </View>
+        {isDateInPast && (
+          <Text className="text-white mt-10 text-center">
+            Você não pode editar hábitos de uma data passada
+          </Text>
+        )}
       </ScrollView>
     </View>
   )

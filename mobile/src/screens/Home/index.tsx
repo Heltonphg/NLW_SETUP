@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Alert, ScrollView, Text, View } from 'react-native'
 import dayjs from 'dayjs'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { DAY_SIZE, HabitDay } from '../../components/HabitDay'
 import { Header } from '../../components/Header'
 import { Loading } from '../../components/Loading'
@@ -22,7 +22,6 @@ export const Home: React.FC = () => {
 
   async function fatchData() {
     try {
-      setLoading(true)
       const { data } = await api.get('summary')
       setSummary(data)
     } catch (error) {
@@ -33,9 +32,11 @@ export const Home: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    fatchData()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      fatchData()
+    }, [])
+  )
 
   if (loading) {
     return <Loading />
