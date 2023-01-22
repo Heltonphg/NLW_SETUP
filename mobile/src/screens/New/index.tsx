@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import colors from 'tailwindcss/colors'
 import { Feather } from '@expo/vector-icons'
 import { BackButton } from '../../components/BackButton'
@@ -10,7 +18,7 @@ const availableWeekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', '
 export const New: React.FC = () => {
   const [title, setTitle] = useState<string>('')
   const [weekDays, setWeekDays] = useState<number[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   function handleToggleWeekDay(weekDayIndex: number) {
     if (weekDays.includes(weekDayIndex)) {
@@ -22,7 +30,7 @@ export const New: React.FC = () => {
 
   async function handleCreateHabit() {
     try {
-      setLoading(true)
+      setIsLoading(true)
       if (!title || weekDays.length === 0) {
         Alert.alert('Novo Hábito', 'Informe o título e a recorrência do hábito')
         return
@@ -38,7 +46,7 @@ export const New: React.FC = () => {
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -78,8 +86,14 @@ export const New: React.FC = () => {
           className="w-full h-14 flex-row items-center justify-center bg-green-600 rounded-md mt-8"
           activeOpacity={0.7}
           onPress={handleCreateHabit}>
-          <Feather name="check" size={20} color={colors.white} />
-          <Text className="font-semibold text-base text-white ml-2">Confirmar</Text>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FFF" />
+          ) : (
+            <>
+              <Feather name="check" size={20} color={colors.white} />
+              <Text className="font-semibold text-base text-white ml-2">Confirmar</Text>
+            </>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </View>
