@@ -59,11 +59,11 @@ export const HabitsList: React.FC<IHabitsListProps> = ({ date, onCompletedChange
       {habitsInfo?.possibleHabits.map((habit) => (
         <CheckBox.Root
           key={habit.id}
-          className="flex items-center gap-3 group"
           onCheckedChange={() => handleToggleHabit(habit.id)}
           checked={habitsInfo.completedHabits.includes(habit.id)}
-          disabled={isDateInPast}>
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500">
+          disabled={isDateInPast}
+          className="flex items-center gap-3 group focus:ouline-none disabled:cursor-not-allowed">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500 transition-colors group-focus:ring-2 group-focus:ring-violet-500 group-focus:ring-off">
             <CheckBox.Indicator>
               <Check size={20} className="text-white" />
             </CheckBox.Indicator>

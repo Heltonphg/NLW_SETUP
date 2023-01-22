@@ -25,14 +25,20 @@ export const HabitDay: React.FC<IHabitDayProps> = ({ amount = 0, defaultComplete
   return (
     <Popover.Root>
       <Popover.Trigger
-        className={clsx('w-10 h-10 border-2 rounded-lg', {
-          'bg-zinc-900 border-zinc-800': completedPorcentege === 0,
-          'bg-violet-900 border-violet-700': completedPorcentege > 0 && completedPorcentege < 20,
-          'bg-violet-800 border-violet-600': completedPorcentege >= 20 && completedPorcentege < 40,
-          'bg-violet-700 border-violet-500': completedPorcentege >= 40 && completedPorcentege < 60,
-          'bg-violet-600 border-violet-500': completedPorcentege >= 60 && completedPorcentege < 80,
-          'bg-violet-500 border-violet-400': completedPorcentege >= 80
-        })}
+        className={clsx(
+          'w-10 h-10 border-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-off',
+          {
+            'bg-zinc-900 border-zinc-800': completedPorcentege === 0,
+            'bg-violet-900 border-violet-700': completedPorcentege > 0 && completedPorcentege < 20,
+            'bg-violet-800 border-violet-600':
+              completedPorcentege >= 20 && completedPorcentege < 40,
+            'bg-violet-700 border-violet-500':
+              completedPorcentege >= 40 && completedPorcentege < 60,
+            'bg-violet-600 border-violet-500':
+              completedPorcentege >= 60 && completedPorcentege < 80,
+            'bg-violet-500 border-violet-400': completedPorcentege >= 80
+          }
+        )}
       />
 
       <Popover.Portal>

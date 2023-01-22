@@ -44,8 +44,7 @@ export const NewHabitForm: React.FC = () => {
         type="text"
         id="title"
         placeholder='Ex: "Estudar React"'
-        className="
-      p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400"
+        className="p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-off"
         autoFocus
         onChange={(event) => setTitle(event.target.value)}
         value={title}
@@ -59,10 +58,10 @@ export const NewHabitForm: React.FC = () => {
         {availableWeekDays.map((weekDay, index) => (
           <CheckBox.Root
             key={weekDay}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group focus:outline-none"
             checked={weekDays.includes(index)}
             onCheckedChange={(checked) => handleToggleWeekDay(!!checked, index)}>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500 transition-colors group-focus:ring-2 group-focus:ring-violet-500 group-focus:ring-off">
               <CheckBox.Indicator>
                 <Check size={20} className="text-white" />
               </CheckBox.Indicator>
@@ -73,7 +72,7 @@ export const NewHabitForm: React.FC = () => {
         ))}
       </div>
 
-      <button className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-green-600 hover:bg-green-500">
+      <button className="mt-6 rounded-lg p-4 flex items-center justify-center gap-3 font-semibold bg-green-600 hover:bg-green-500 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-off">
         <Check size={20} weight="bold" />
         Confirmar
       </button>
